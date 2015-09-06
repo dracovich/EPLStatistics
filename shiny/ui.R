@@ -71,7 +71,12 @@ shinyUI(pageWithSidebar(
             p("You can choose to fit a loess smoother, to get some small idea of general trends in the data, as it is very jittery."),
             plotOutput('graph'),
             
-            h4("Assumptions and data cleaning"),
-            p("The data used here comes from the jokecamp football data git (https://github.com/jokecamp/FootballData), and the
-            R-File used to clean the data and create this averaged database can be found on my own github page")            )
+            h4("Data origin, assumptions, and data cleaning."),
+            p("The data used here comes from the jokecamp football data git (https://github.com/jokecamp/FootballData), and the R code i 
+              wrote to clean and aggregate the statistics can be found on my own github page, https://github.com/dracovich/EPLStatistics. Data on EPL managers is taken from wikipedia."),
+            p("Since a lot of the managers in EPL have been caretakers over only a few games, and this is more of a big view, i
+              have made all caretaker managers into one big group, just called 'Caretaker manager'. If there is overlap in managers,
+              i give the incoming manager the game."),
+            p("I'll be looking into getting better and more up to date data, perhaps creating some web crawler to get data from
+              websites that have match data  and statistics (premierleague.com for exmaple)."))
 ))
