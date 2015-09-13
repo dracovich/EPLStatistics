@@ -11,11 +11,11 @@ source(file="teamStanding.R")
 source(file="tableStanding.R")
 
 ## Download and clean data, only if this is first time running
-## source("data-cleaning.R")
+## source("get-data.R")
 
 ## Load the edited file and define the colClasses
-col<-c("factor",rep("character",4),rep("numeric",5),"character",rep("numeric",16))
-data<-read.csv("games_clean.csv")
+col<-c("factor",rep("character",4),rep("numeric",2),"factor",rep("numeric",15))
+data<-read.csv("all_seasons.csv", colClasses=col)
 
 ## We have to reformat the date variable from a string to a date
 ## Upon looking at data however, we see that tehre are two formats in data, so we need to split data first
@@ -30,8 +30,13 @@ dateLong$Date<-as.Date(dateLong$Date, "%d/%m/%Y")
 
 data<-rbind(dateShort,dateLong)
 
+## Define home and away discipline points (HDP and ADP respectively), 10points for yellow, 25 for red.
+data$ADP<-data$AY*10+data$AR*25
+data$HDP<-data$HY*10+data$HR*25
+
 ## Incomplete dataset, missing half of 12-13 and nothing after that
-seasons_wanted<-c("01-02",
+seasons_wanted<-c("00-01",
+                  "01-02",
                   "02-03",
                   "03-04",
                   "04-05",
@@ -41,16 +46,21 @@ seasons_wanted<-c("01-02",
                   "08-09",
                   "09-10",
                   "10-11",
-                  "11-12")
-selection_row<-data$season %in% seasons_wanted
+                  "11-12",
+                  "12-13",
+                  "13-14",
+                  "14-15")
 
+selection_row<-data$season %in% seasons_wanted
 data<-cbind(data,selection_row)
 
 ## Select the relevant seasons, and premier league (E0) only
-data<-subset(data,selection_row==TRUE & Div=="E0")
+data<-subset(data,selection_row==TRUE)
 
 ## Need to rename since "AS" messes with the SQL syntax if its a variable name.
 data<-rename(data,c("AS"="AwayShots", "HS"="HomeShots"))
+
+data<-data[order(data$Date),]
 
 ## We cycle through all games in all seasons, and create a rolling mean of the previous
 ## 3 games for all variables, in order to get predictive variables.
@@ -59,9 +69,10 @@ for(k in seasons_wanted){
       teams<-unique(season_subset$HomeTeam)
       for (i in teams){
             team_subset<-subset(season_subset,(HomeTeam==i | AwayTeam==i))
+
             ## Run the cleanup on data for team i  
             team_cleaned<-teamCleanup(i,team_subset)
-            
+      
             ## If it's the first team, initiate the data-frame, if not just append it
             if(i==teams[1]){
                   combined<-team_cleaned
@@ -103,7 +114,7 @@ withManagers<- sqldf("select  distinct
                      
                      from     totalCombined as g
                               
-                              left join
+                              full join
                               managers as m
                               on m.Team=g.team
                         where g.Date<=m.ToDate   AND

@@ -50,7 +50,7 @@ shinyUI(pageWithSidebar(
                              "Wigan"="Wigan",
                              "Wolves"="Wolves"                             
                              )),
-            checkboxInput("loessyn", "Fit loess smoother?", FALSE),
+            checkboxInput("loessyn", "Fit loess smoother?", TRUE),
             
             selectInput("stat", "Statistic:",
                         c( "Goals" = "mGoals",
@@ -76,7 +76,5 @@ shinyUI(pageWithSidebar(
               wrote to clean and aggregate the statistics can be found on my own github page, https://github.com/dracovich/EPLStatistics. Data on EPL managers is taken from wikipedia."),
             p("Since a lot of the managers in EPL have been caretakers over only a few games, and this is more of a big view, i
               have made all caretaker managers into one big group, just called 'Caretaker manager'. If there is overlap in managers,
-              i give the incoming manager the game."),
-            p("I'll be looking into getting better and more up to date data, perhaps creating some web crawler to get data from
-              websites that have match data  and statistics (premierleague.com for exmaple)."))
+              i give the incoming manager the game."))
 ))

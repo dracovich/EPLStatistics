@@ -7,10 +7,10 @@ teamMerge<-function(sData,tData){
                                   "mShotsOnTarget"="aShotsOnTarget",
                                   "mCorners"="aCorners",
                                   "mFouls"="aFouls",
-                                  "mOffsides"="aOffsides",
                                   "mYellows"="aYellows",
                                   "mReds"="aReds",
                                   "mPoints"="aPoints",
+                                  "mDP"="aHP",
                                   "standing"="aStanding"))
       
       awayMerge<-merge(sData,awayTeam,by=c("X","AwayTeam"))
@@ -23,10 +23,10 @@ teamMerge<-function(sData,tData){
                                   "mShotsOnTarget"="hShotsOnTarget",
                                   "mCorners"="hCorners",
                                   "mFouls"="hFouls",
-                                  "mOffsides"="hOffsides",
                                   "mYellows"="hYellows",
                                   "mReds"="hReds",
                                   "mPoints"="hPoints",
+                                  "mDP"="hDP",
                                   "standing"="hStanding"))
       
       homeMerge<-merge(awayMerge,homeTeam,by=c("X","HomeTeam"))

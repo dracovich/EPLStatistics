@@ -1,7 +1,7 @@
 teamCleanup<-function(t,data){
       
       homeList<-data[data$HomeTeam==t,]
-            cleanHome<-homeList[c(1,2,4)]
+            cleanHome<-homeList[c(1,2,3)]
             cleanHome$team<-t
             cleanHome$HomeAway<-"Home"
             cleanHome$goals<-homeList$FTHG
@@ -9,8 +9,8 @@ teamCleanup<-function(t,data){
             cleanHome$shotsOnTarget<-homeList$HST
             cleanHome$corners<-homeList$HC
             cleanHome$fouls<-homeList$HF
-            cleanHome$offsides<-homeList$HO
             cleanHome$yellows<-homeList$HY
+            cleanHome$DP<-homeList$HDP
             cleanHome$reds<-homeList$HR
                   homeWins<-homeList[homeList$FTHG>homeList$FTAG,]
                         homeW<-homeWins[1]
@@ -25,7 +25,7 @@ teamCleanup<-function(t,data){
             finalHome<-merge(cleanHome,homePoints,by="X")
       
       awayList<-data[data$AwayTeam==t,]
-            cleanAway<-awayList[c(1,2,4)]
+            cleanAway<-awayList[c(1,2,3)]
             cleanAway$team<-t
             cleanAway$HomeAway<-"Away"
             cleanAway$goals<-awayList$FTHG
@@ -33,8 +33,8 @@ teamCleanup<-function(t,data){
             cleanAway$shotsOnTarget<-awayList$HST
             cleanAway$corners<-awayList$HC
             cleanAway$fouls<-awayList$HF
-            cleanAway$offsides<-awayList$HO
             cleanAway$yellows<-awayList$HY
+            cleanAway$DP<-awayList$ADP
             cleanAway$reds<-awayList$HR
                   awayWins<-awayList[awayList$FTHG<awayList$FTAG,]
                         awayW<-awayWins[1]
@@ -49,7 +49,7 @@ teamCleanup<-function(t,data){
             finalAway<-merge(cleanAway,awayPoints,by="X")
       
       combined<-rbind(finalHome,finalAway)
-      clean<-combined[order(combined$X),]
+      clean<-combined[order(combined$Date),]
       
       ## Add the cumulative sum of points to get the total points at any point in the seaso
       cumPoints<-cumsum(clean$points)      
@@ -67,9 +67,9 @@ teamCleanup<-function(t,data){
       mStats$mShotsOnTarget<-rollmean(clean$shotsOnTarget,5)
       mStats$mCorners<-rollmean(clean$corners,5)
       mStats$mFouls<-rollmean(clean$fouls,5)
-      mStats$mOffsides<-rollmean(clean$offsides,5)
       mStats$mYellows<-rollmean(clean$yellows,5)
       mStats$mReds<-rollmean(clean$reds,5)
+      mStats$DP<-rollmean(clean$DP,5)
       mStats$mPoints<-rollmean(clean$points,5)
       
       ## Remove the last row as it can't be used
