@@ -114,7 +114,7 @@ withManagers<- sqldf("select  distinct
                      
                      from     totalCombined as g
                               
-                              full join
+                              left join
                               managers as m
                               on m.Team=g.team
                         where g.Date<=m.ToDate   AND

@@ -5,9 +5,13 @@ teamCleanup<-function(t,data){
             cleanHome$team<-t
             cleanHome$HomeAway<-"Home"
             cleanHome$goals<-homeList$FTHG
+            cleanHome$goalsConceded<-homeList$FTAG
             cleanHome$shots<-homeList$HomeShots
+            cleanHome$shotsConceded<-homeList$AwayShots
             cleanHome$shotsOnTarget<-homeList$HST
+            cleanHome$shotsOnTargetConceded<-homeList$AST
             cleanHome$corners<-homeList$HC
+            cleanHome$cornersConceded<-homeList$AC
             cleanHome$fouls<-homeList$HF
             cleanHome$yellows<-homeList$HY
             cleanHome$DP<-homeList$HDP
@@ -28,14 +32,18 @@ teamCleanup<-function(t,data){
             cleanAway<-awayList[c(1,2,3)]
             cleanAway$team<-t
             cleanAway$HomeAway<-"Away"
-            cleanAway$goals<-awayList$FTHG
-            cleanAway$shots<-awayList$HomeShots
-            cleanAway$shotsOnTarget<-awayList$HST
-            cleanAway$corners<-awayList$HC
-            cleanAway$fouls<-awayList$HF
-            cleanAway$yellows<-awayList$HY
+            cleanAway$goals<-awayList$FTAG
+            cleanAway$goalsConceded<-awayList$FTHG
+            cleanAway$shots<-awayList$AwayShots
+            cleanAway$shotsConceded<-awayList$HomeShots
+            cleanAway$shotsOnTarget<-awayList$AST
+            cleanAway$shotsOnTargetConceded<-awayList$HST
+            cleanAway$corners<-awayList$AC
+            cleanAway$cornersConceded<-awayList$HC
+            cleanAway$fouls<-awayList$AF
+            cleanAway$yellows<-awayList$AY
             cleanAway$DP<-awayList$ADP
-            cleanAway$reds<-awayList$HR
+            cleanAway$reds<-awayList$AR
                   awayWins<-awayList[awayList$FTHG<awayList$FTAG,]
                         awayW<-awayWins[1]
                         if(nrow(awayW)>0){awayW$points<-3}
@@ -63,9 +71,13 @@ teamCleanup<-function(t,data){
       ## Calculate the mean of each stat from last 5 games
       mStats<-as.data.frame(rollmean(clean$goals,5))
       names(mStats)[1]<-"mGoals"
+      mStats$mGoalsConceded<-rollmean(clean$goalsConceded,5)
       mStats$mShots<-rollmean(clean$shots,5)
+      mStats$mShotsConceded<-rollmean(clean$shotsConceded,5)
       mStats$mShotsOnTarget<-rollmean(clean$shotsOnTarget,5)
+      mStats$mShotsOnTargetConceded<-rollmean(clean$shotsOnTargetConceded,5)
       mStats$mCorners<-rollmean(clean$corners,5)
+      mStats$mCornersConceded<-rollmean(clean$cornersConceded,5)
       mStats$mFouls<-rollmean(clean$fouls,5)
       mStats$mYellows<-rollmean(clean$yellows,5)
       mStats$mReds<-rollmean(clean$reds,5)
@@ -75,11 +87,11 @@ teamCleanup<-function(t,data){
       ## Remove the last row as it can't be used
       mStats<-mStats[-34,]
       
-      ## Remove the first three rows in arsenal data as those won't have a 3 game mean.
-      relevantData<-clean[-c(1,2,3,4,5),c(1,2,3,4,5,15,16)]
+      ## Remove the first five rows in arsenal data as those won't have a 5 game mean.
+      relevantData<-clean[-c(1,2,3,4,5),c(1,2,3,4,5,19,20)]
       
       ## We add the first 3 games again here, and remove them later, it's needed for the table standing function.
-      combined<-rbind.fill(clean[c(1,2,3,4,5),c(1,2,3,4,5,15,16)],cbind(relevantData,mStats))
+      combined<-rbind.fill(clean[c(1,2,3,4,5),c(1,2,3,4,5,19,20)],cbind(relevantData,mStats))
       return(combined)
 }
 

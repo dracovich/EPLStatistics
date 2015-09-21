@@ -54,18 +54,27 @@ shinyUI(pageWithSidebar(
             
             selectInput("stat", "Statistic:",
                         c( "Goals" = "mGoals",
-                              "Total Shots" = "mShots",
-                              "Shots on Target" = "mShotsOnTarget",
-                              "Corners" = "mCorners",
-                              "Fouls Committed" = "mFouls",
-                              "Yellow cards" = "mYellows"
-                        ),selected=NULL)
+                           "Goals Conceded" = "mGoalsConceded",
+                           "Total Shots" = "mShots",
+                           "Total Shots Conceded" = "mShotsConceded",
+                           "Shots on Target" = "mShotsOnTarget",
+                           "Shots on Target Conceded" = "mShotsOnTargetConceded",
+                           "Corners" = "mCorners",
+                           "Corners Conceded" = "mCornersConceded",
+                           "Fouls Committed" = "mFouls",
+                           "Points" = "mPoints",
+                           "Discipline Points" = "DP"
+                        ),selected=NULL),
+            h4("Statistics Explained: "),
+            p("All statistics are the average of the previous 5 games, and almost all are self explanatory. The exception being
+            the 'Disciplin Points'. This feature is to measure Yellow/Red cards, by giving yellow cards a value of 10, and 
+            red cards a value of 25 (and averaging over the past 5 games)")
       ),
       
       mainPanel(
             h4("Basic instructions:"),
             p("Select a team and a statistic, and the page will print out the rolling mean (over the past 5 games), 
-              from the 2001-2002 season, until the 2011-2012 season."),
+              from the 2001-2002 season, until the 2014-2015 season."),
             p("This program only uses premier league data, so any teams that were relegated for some years will see a gap
               in the data."),
             p("You can choose to fit a loess smoother, to get some small idea of general trends in the data, as it is very jittery."),
